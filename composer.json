@@ -7,7 +7,6 @@
     "require": {
         "php": "^8.2",
         "sylius/sylius": "^2.0",
-        "symfony/amqp-messenger": "^6.4 || ^7.0",
         "symfony/messenger": "^6.4 || ^7.0"
     },
     "require-dev": {
