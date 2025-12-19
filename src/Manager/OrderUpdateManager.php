@@ -107,7 +107,7 @@ final class OrderUpdateManager implements OrderUpdateManagerInterface
 
                 $this->productApi->createProductEventByCustomId(
                     $resource,
-                    $variant->getId(),
+                    $variant->getCode(),
                     $this->productEventPayloadBuilder->build($eventType, $variant, $email),
                     $this->getProductName($variant, $product),
                 );

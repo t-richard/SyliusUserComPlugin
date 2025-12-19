@@ -42,6 +42,7 @@ final class UserComApiAwareTypeExtension extends AbstractTypeExtension
                     'label' => 'bitbag_sylius_user_com_plugin.ui.user_com_api_key',
                     'required' => false,
                     'mapped' => false,
+                    'always_empty' => false,
                 ],
             )
             ->add(

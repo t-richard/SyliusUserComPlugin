@@ -21,7 +21,7 @@ interface ProductApiInterface
 
     public function createProductEventByCustomId(
         UserComApiAwareInterface $resource,
-        int $productId,
+        string $productId,
         array $payload,
         string $productName,
     ): ?array;

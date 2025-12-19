@@ -18,7 +18,7 @@ final class ProductApi extends AbstractClient implements ProductApiInterface
 {
     public function createProductEventByCustomId(
         UserComApiAwareInterface $resource,
-        int $productId,
+        string $productId,
         array $payload,
         string $productName,
     ): ?array {
