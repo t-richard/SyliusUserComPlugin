@@ -11,5 +11,7 @@
             <argument type="service" id="sylius.context.channel.composite"/>
             <argument type="service" id="monolog.logger.user_com"/>
         </service>
+
+        <service id="BitBag\SyliusUserComPlugin\Provider\UserComApiAwareResourceProviderInterface" alias="bit_bag.sylius_user_com_plugin.provider.user_com_api_aware_resource_provider" />
     </services>
 </container>

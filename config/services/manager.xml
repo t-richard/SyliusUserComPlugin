@@ -41,5 +41,7 @@
             <argument type="string">%user_com.encryption_key%</argument>
             <argument type="string">%user_com.encryption_iv%</argument>
         </service>
+
+        <service id="BitBag\SyliusUserComPlugin\Manager\UserComApiTokenManagerInterface" alias="bit_bag.sylius_user_com_plugin.manager.user_com_api_token_manager" />
     </services>
 </container>
