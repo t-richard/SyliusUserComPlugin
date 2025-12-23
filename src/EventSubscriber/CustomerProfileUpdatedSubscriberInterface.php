@@ -27,5 +27,6 @@ interface CustomerProfileUpdatedSubscriberInterface
         'sylius_shop_account_address_book_set_as_default' => 'shop_customer_default_address_update',
         'sylius_shop_register' => 'customer_registration',
         'sylius_shop_checkout_address' => 'customer_order_address_provided',
+        // TODO refactor to event name resolver service
     ];
 }

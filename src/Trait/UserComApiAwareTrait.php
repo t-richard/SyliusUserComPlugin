@@ -23,8 +23,8 @@ trait UserComApiAwareTrait
     /** @ORM\Column(name="user_com_api_key", type="string", nullable=true) */
     private ?string $userComApiKey = null;
 
-    #[ORM\Column(name: 'user_com_gtmcontainer_id', type: 'string', nullable: true)]
-    /** @ORM\Column(name="user_com_gtmcontainer_id", type="string", nullable=true) */
+    #[ORM\Column(name: 'user_com_gtm_container_id', type: 'string', nullable: true)]
+    /** @ORM\Column(name="user_com_gtm_container_id", type="string", nullable=true) */
     private ?string $userComGTMContainerId = null;
 
     public function getUserComUrl(): ?string
