@@ -5,7 +5,7 @@
         <defaults autowire="false" autoconfigure="false"/>
         <service
             id="bit_bag.sylius_user_com_plugin.resolver.customer_updated_event_name_resolver"
-            class="BitBag\SyliusUserComPlugin\Resolver\CustomerUpdatedEventNameResolver"
+            class="BitBag\SyliusUserComPlugin\Resolver\RouteBasedCustomerUpdatedEventNameResolver"
         >
             <argument type="service" id="request_stack"/>
         </service>
