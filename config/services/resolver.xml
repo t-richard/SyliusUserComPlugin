@@ -7,6 +7,7 @@
             id="bit_bag.sylius_user_com_plugin.resolver.customer_updated_event_name_resolver"
             class="BitBag\SyliusUserComPlugin\Resolver\RouteBasedCustomerUpdatedEventNameResolver"
         >
+            <argument type="service" id="bit_bag.sylius_user_com_plugin.provider.route_to_event_mapping_provider"/>
             <argument type="service" id="request_stack"/>
         </service>
 
