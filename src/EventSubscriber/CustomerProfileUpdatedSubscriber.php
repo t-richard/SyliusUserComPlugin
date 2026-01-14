@@ -14,6 +14,7 @@ namespace BitBag\SyliusUserComPlugin\EventSubscriber;
 use BitBag\SyliusUserComPlugin\Dispatcher\CustomerMessageDispatcherInterface;
 use BitBag\SyliusUserComPlugin\Manager\CookieManagerInterface;
 use BitBag\SyliusUserComPlugin\Provider\UserComApiAwareResourceProviderInterface;
+use BitBag\SyliusUserComPlugin\Resolver\CustomerUpdatedEventNameResolverInterface;
 use BitBag\SyliusUserComPlugin\Trait\UserComApiAwareInterface;
 use Psr\Log\LoggerInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
@@ -25,11 +26,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSubscriberInterface, EventSubscriberInterface
 {
     public function __construct(
-        private readonly CustomerMessageDispatcherInterface $customerMessageDispatcher,
-        private readonly UserComApiAwareResourceProviderInterface $userComApiAwareResourceProvider,
-        private readonly CookieManagerInterface $cookieManager,
-        private readonly RequestStack $requestStack,
-        private readonly LoggerInterface $logger,
+        private readonly CustomerMessageDispatcherInterface        $customerMessageDispatcher,
+        private readonly UserComApiAwareResourceProviderInterface  $userComApiAwareResourceProvider,
+        private readonly CookieManagerInterface                    $cookieManager,
+        private readonly CustomerUpdatedEventNameResolverInterface $customerUpdatedEventNameResolver,
+        private readonly LoggerInterface                           $logger,
     ) {
     }
 
@@ -49,7 +50,7 @@ final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSu
         }
 
         $cookie = $this->cookieManager->getUserComCookie();
-        $eventName = $this->resolveEventName();
+        $eventName = $this->customerUpdatedEventNameResolver->resolve();
 
         $resource = $this->userComApiAwareResourceProvider->getApiAwareResource();
         if (!$resource instanceof UserComApiAwareInterface || null === $resource->getId()) {
@@ -68,26 +69,6 @@ final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSu
             $customer->getDefaultAddress(),
             strtolower($customer->getEmail() ?? ''),
         );
-    }
-
-    private function resolveEventName(): string
-    {
-        $request = $this->requestStack->getCurrentRequest();
-        if (null === $request) {
-            return self::DEFAULT_EVENT;
-        }
-
-        $route = $request->attributes->get('_route');
-        if (null === $route) {
-            return self::DEFAULT_EVENT;
-        }
-
-        return
-            is_string($route) &&
-            array_key_exists($route, self::ROUTE_TO_EVENT_MAP)
-            ? self::ROUTE_TO_EVENT_MAP[$route]
-            : self::DEFAULT_EVENT
-        ;
     }
 
     public static function getSubscribedEvents()
