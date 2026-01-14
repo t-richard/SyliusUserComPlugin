@@ -2,7 +2,7 @@
 
 namespace BitBag\SyliusUserComPlugin\Provider;
 
-class RouteToEventMappingProvider implements RouteToEventMappingProviderInterface
+final class RouteToEventMappingProvider implements RouteToEventMappingProviderInterface
 {
     public function getRouteMapping(): array
     {
