@@ -16,15 +16,18 @@ use BitBag\SyliusUserComPlugin\Manager\CookieManagerInterface;
 use BitBag\SyliusUserComPlugin\Provider\UserComApiAwareResourceProviderInterface;
 use BitBag\SyliusUserComPlugin\Resolver\CustomerUpdatedEventNameResolverInterface;
 use BitBag\SyliusUserComPlugin\Trait\UserComApiAwareInterface;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Psr\Log\LoggerInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Core\Model\CustomerInterface;
 use Sylius\Component\Core\Model\OrderInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Service\ResetInterface;
 
-final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSubscriberInterface, EventSubscriberInterface
+final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSubscriberInterface, EventSubscriberInterface, ResetInterface
 {
+    public ?string $oldEmail = null;
+
     public function __construct(
         private readonly CustomerMessageDispatcherInterface        $customerMessageDispatcher,
         private readonly UserComApiAwareResourceProviderInterface  $userComApiAwareResourceProvider,
@@ -34,6 +37,7 @@ final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSu
     ) {
     }
 
+    #[\Override]
     public function dispatch(ResourceControllerEvent $event): void
     {
         $customer = $event->getSubject();
@@ -67,10 +71,21 @@ final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSu
             $cookie,
             $customer,
             $customer->getDefaultAddress(),
-            strtolower($customer->getEmail() ?? ''),
+            strtolower($this->oldEmail ?? $customer->getEmail() ?? ''),
         );
     }
 
+    #[\Override]
+    public function preUpdate(PreUpdateEventArgs $preUpdate): void
+    {
+        if (!$preUpdate->getObject() instanceof CustomerInterface || !$preUpdate->hasChangedField('email')) {
+            return;
+        }
+
+        $this->oldEmail = $preUpdate->getOldValue('email');
+    }
+
+    #[\Override]
     public static function getSubscribedEvents()
     {
         return [
@@ -78,5 +93,11 @@ final class CustomerProfileUpdatedSubscriber implements CustomerProfileUpdatedSu
             'sylius.customer.post_update' => 'dispatch',
             'sylius.order.post_address' => 'dispatch',
         ];
+    }
+
+    #[\Override]
+    public function reset(): void
+    {
+        $this->oldEmail = null;
     }
 }

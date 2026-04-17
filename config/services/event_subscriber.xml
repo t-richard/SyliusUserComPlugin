@@ -13,7 +13,9 @@
             <argument type="service" id="bit_bag.sylius_user_com_plugin.manager.cookie_manager"/>
             <argument type="service" id="bit_bag.sylius_user_com_plugin.resolver.customer_updated_event_name_resolver"/>
             <argument type="service" id="monolog.logger.user_com"/>
+
             <tag name="kernel.event_subscriber"/>
+            <tag name="doctrine.event_listener" event="preUpdate" />
         </service>
 
         <service id="bit_bag.sylius_user_com_plugin.event_subscriber.cookie_flusher_subscriber" class="BitBag\SyliusUserComPlugin\EventSubscriber\CookieFlusherSubscriber">
