@@ -11,6 +11,9 @@ declare(strict_types=1);
 
 namespace BitBag\SyliusUserComPlugin\EventSubscriber;
 
+use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
+
 interface CustomerProfileUpdatedSubscriberInterface
 {
     public const DEFAULT_EVENT = 'undefined_event_name';
@@ -28,4 +31,8 @@ interface CustomerProfileUpdatedSubscriberInterface
         'sylius_shop_register' => 'customer_registration',
         'sylius_shop_checkout_address' => 'customer_order_address_provided',
     ];
+
+    public function dispatch(ResourceControllerEvent $event): void;
+
+    public function preUpdate(PreUpdateEventArgs $preUpdate): void;
 }
